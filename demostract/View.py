@@ -6,7 +6,7 @@ from django.views import View
 
 class Index(View):
     def get(self,request):
-        return render(request, 'easyPcc/flow_one_step')
+        return render(request, 'easyPcc/flow_one_step.html')
     def post(self,request):
         pass
 
