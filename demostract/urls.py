@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from demostract.View import Index
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('', Index.as_view(),name='index'),
+
+    path('uploadFile_1', UpdaLoad.as_view(),name='index'),
 ]
