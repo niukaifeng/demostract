@@ -66,6 +66,13 @@ TEMPLATES = [
         },
     },
 ]
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+# 创建静态文件路径
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 WSGI_APPLICATION = 'demostract.wsgi.application'
 

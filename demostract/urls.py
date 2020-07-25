@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from demostract.View import Index,UpdaLoad
+from demostract.View import Index,UpdaLoad,LearningType,UpdaLoad2
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +24,12 @@ urlpatterns = [
     path('', Index.as_view(),name='index'),
 
     path('uploadFile_1', UpdaLoad.as_view(),name='index'),
+
+    path('uploadFile_2', UpdaLoad2.as_view(),name='index'),
+
+    path('learningType', LearningType.as_view(),name='index'),
+
+
+
+
 ]
