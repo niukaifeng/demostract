@@ -90,30 +90,20 @@
                 <span class="sr-only">90% Complete</span>
               </div>
             </div>
-            <div class="btn-group">
-              <button type="button" class="btn btn-danger">Choose the pictures to be processed</button>
-              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Use the whole picture(s)</span>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a href="#">Use the whole picture(s)</a></li>
-              </ul>
-            </div>
-            <br><br>
+              <div>
+                  Choose the machine learning model
+                  <select name = "learningType">
+                      <option><a href="#">Classification and Regression Tree (Sklearn)</a></option>
+                      <option class="disabled"><a href="#">Random Forest Classifier (Sklearn)</a></option>
+                      <option><a href="#">Support Vector Machine (Sklearn)</a></option>
+                  </select>
+                  <br><br>
 
-          <div class="btn-group">
-              <button type="button" class="btn btn-danger">Choose the machine learning model</button>
-              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Use the whole picture(s)</span>
-              </button>
-              <ul class="dropdown-menu">
-                  <li><a href="#">Classification and Regression Tree (Sklearn)</a></li>
-                  <li><a href="#">Random Forest Classifier (Sklearn)</a></li>
-                  <li><a href="#">Support Vector Machine (Sklearn)</a></li>
-              </ul>
-            </div>
+                  Choose the pictures to be processed
+                  <select>
+                      <option> RIO</option>
+                  </select>
+              </div>
             <br>
 
               <input value="{{ path2 }}" name="path2" type="hidden">

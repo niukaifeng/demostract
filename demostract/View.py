@@ -53,35 +53,47 @@ class LearningType(View):
     def post(self,request):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         learningType  = request.POST.get("learningType")
+        RIO = request.POST.get("RIO")
+        reduction = request.POST.get("reduction","100")
         path1 = request.POST.get("path1")
         path2 = request.POST.get("path2")
 
-        f = open(path1, "r", newline='')
-        TrainData = list(csv.reader(f))
-        f.close()
-        # TrainData.remove(['Class', 'Image', 'x', 'y', 'B', 'G', 'R', 'H', 'S', 'V', 'L', 'a', 'b'])
-        # TrainData = np.asarray(TrainData)
-        # classes = TrainData[:, 0]
-
-        f2 = open(path2, "r", newline='')
-        f2.close()
-
-        # Initialize the list
-        ListImageWrongSize = []
-
         fusion = 'N'
-        mask = 'N'
-        reconstructedimage = 'N'
-        info = 'N'
-        NFMask = 'N'
-        BiggestBlob = 'N'
-        # Call the function
+        mask = 'Y'
+        reconstructedimage = 'Y'
+        info = 'Y'
+        NFMask = 'Y'
+        BiggestBlob = 'Y'
+
+        trandatafilelist = list()
+        trandatafilelist.append(path1)
+
+        tragetfilelist = list()
+        tragetfilelist.append(path2)
+
+        learningType = "Classification and Regression Tree (Sklearn)"
+
+        reduction = int(reduction)
+
         start_time = time.monotonic()
 
+        numberOfClasses = int(2)
+
+        classNameList = ['Class_1', 'Class_2']
+
+        ROI = 'Whole pictures'
+
+        ListAreaNames = list()
+
+        chosenArea = ["Class_1"]
+
+
+        RefImg = path2
+
         ListImageWrongSize, ListRunningTimes, ListTestDataTimes, ListApplyModelTimes, ListSaveOutputTimes = Segmentation(
-            os.path.join(BASE_DIR, 'demostract', 'media'), self.ListtrainingData, self.listPictureNames, self.comboBox_model.currentText(),
-            self.spinbox_noiseReduction.value(), self.classes, self.classesNamesList, self.ROI, self.ListAreaNames,
-            fusion, mask, reconstructedimage, info, NFMask, BiggestBlob, self.ListClassesForSurface, self.RefImg)
+            os.path.join(BASE_DIR, 'demostract', 'media'), trandatafilelist, tragetfilelist, learningType,
+            reduction, numberOfClasses, classNameList, ROI, ListAreaNames,
+            fusion, mask, reconstructedimage, info, NFMask, BiggestBlob, chosenArea, RefImg)
 
         end_time = time.monotonic()
         time_all = timedelta(seconds=end_time - start_time)
@@ -92,41 +104,44 @@ class LearningType(View):
         MeanRunningTimeModel = np.mean(ListApplyModelTimes)
         MeanRunningTimeOutput = np.mean(ListSaveOutputTimes)
 
-        ReferencePicture = cv2.imread(self.RefImg)
+        ReferencePicture = cv2.imread(RefImg)
         sizefirstImage = np.shape(ReferencePicture)
 
         sizeROI = sizefirstImage
 
         report = ('Activity report: ' +
-                  '\n \n Working directory: ' + str(self.WorkingDirectory) +
-                  '\n \n Training data: ' + str(self.ListtrainingData) +
-                  '\n \n Number of classes: ' + str(self.classes) +
-                  '\n \n Classes name: ' + str(self.classesNamesList) +
+                  '\n \n Working directory: ' + str(os.path.join(BASE_DIR, 'demostract', 'media')) +
+                  '\n \n Training data: ' + str(trandatafilelist) +
+                  '\n \n Number of classes: ' + str(tragetfilelist) +
+                  '\n \n Classes name: ' + str(learningType) +
                   '\n \n Fusion of classes: ' + str(fusion) +
-                  '\n \n Classe(s) of interest: ' + str(self.ListClassesForSurface) +
-                  '\n \n Number of pictures tested: ' + str(len(self.listPictureNames)) +
+                  '\n \n Classe(s) of interest: ' + str(mask) +
+                  '\n \n Number of pictures tested: ' + str(len(reconstructedimage)) +
                   '\n \n Size of the pictures: ' + str(sizefirstImage) +
-                  '\n \n Model: ' + str(self.comboBox_model.currentText()) +
-                  '\n \n Number of regions of interest:' + str(len(self.ListAreaNames)) +
-                  '\n \n Regions of interest coordinates: ' + str(self.ROI) +
-                  '\n \n Region names: ' + str(self.ListAreaNames) +
+                  '\n \n Model: ' + str() +
+                #  '\n \n Number of regions of interest:' + str(len(ListAreaNames)) +
+                  '\n \n Regions of interest coordinates: ' + str(ROI) +
+                  '\n \n Region names: ' + str(ListAreaNames) +
                   '\n \n Size of the regions of interest: ' + str(sizeROI) +
-                  '\n \n Noise reduction: ' + str(self.spinbox_noiseReduction.value()) +
+                  '\n \n Noise reduction: ' + str(reduction) +
                   '\n \n Mask saved: ' + str(mask) +
                   '\n \n Reconstructed image saved: ' + str(reconstructedimage) +
                   '\n \n Information file saved: ' + str(info) +
                   '\n \n Only keep the biggest region: ' + str(BiggestBlob) +
-                  '\n \n Reference picture used for choosing the region of interest: ' + str(self.RefImg) +
+                  '\n \n Reference picture used for choosing the region of interest: ' + str(RefImg) +
                   '\n \n Total Running time: ' + str(time_all) +
                   '\n \n Mean running time for each pictures: ' + str(MeanRunningTime) + 'sec' +
                   '\n \n Mean time to create the test data: ' + str(MeanRunningTimeTestData) + 'sec' +
                   '\n \n Mean time to apply the model: ' + str(MeanRunningTimeModel) + 'sec' +
                   '\n \n Mean time to save the outputs: ' + str(MeanRunningTimeOutput) + 'sec' +
                   '\n \n Pictures which have not been processed because of their size: ' + str(ListImageWrongSize) +
-                  '\n \n Pictures List: ' + str(self.listPictureNames))
+                  '\n \n Pictures List: ' + str(tragetfilelist))
 
         report = np.array([report])
-        np.savetxt(self.WorkingDirectory + '/Activity_Report.txt', report, delimiter="\n", comments='', fmt='%s')
 
-        return render(request, 'easyPcc/flow_three_step.html')
+        outPath = os.path.join(BASE_DIR, 'demostract', 'media') + '/Activity_Report.txt'
 
+
+        np.savetxt(outPath, report, delimiter="\n", comments='', fmt='%s')
+
+        return render(request, 'easyPcc/result.html',{outPath:outPath})
