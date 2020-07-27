@@ -24,6 +24,10 @@ class UpdaLoad(View):
     def post(self,request):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         uploadFile = request.FILES.get('myfile', '1')
+
+        if uploadFile == None or uploadFile == "":
+            return render(request, 'easyPcc/flow_one_step.html', {"msg": "文件必须上传"})
+
         print(uploadFile.name)
         path1 = os.path.join(BASE_DIR, 'demostract', 'media', uploadFile.name)
         f = open(path1, 'wb')
@@ -92,7 +96,7 @@ class LearningType(View):
         RefImg = path2
 
 
-        outfile2 = os.path.join(BASE_DIR, 'demostract', 'media') + 'InformationFile.csv'
+        outfile2 = os.path.join(BASE_DIR, 'demostract', 'media') + '/InformationFile.csv'
 
         ListImageWrongSize, ListRunningTimes, ListTestDataTimes, ListApplyModelTimes, ListSaveOutputTimes = Segmentation(
             os.path.join(BASE_DIR, 'demostract', 'media'), trandatafilelist, tragetfilelist, learningType,
@@ -153,7 +157,7 @@ class LearningType(View):
 class Downloadfiel(View):
 
     def get(self,request):
-        outPath = request.Get.get("filenamePath")
+        outPath = request.GET.get("filenamePath")
         file = open(outPath, 'rb')
         response = HttpResponse(file)
         response['Content-Type'] = 'application/octet-stream'  # 设置头信息，告诉浏览器这是个文件
