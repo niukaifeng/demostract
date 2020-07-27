@@ -76,17 +76,20 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-          <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="90" style="width: 100%;">
-            <span class="sr-only">60% Complete</span>
-          </div>
-        </div>
+          <div class="page-header">
+                <h1> 下载生成文件</h1>
+                <ul class="bs-glyphicons-list">
+                    <li>
+                      <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                      <a class="glyphicon-class" href="downloadfiel?path={{ outPath }}">InformationFile.csv</a>
+                    </li>
+                    <li>
+                      <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                      <a class="glyphicon-class" href="downloadfiel?path={{ outfile2 }}">trainData_2classes.csv</a>
+                    </li>
+                </ul>
 
-          <form enctype="multipart/form-data" action="/learningType" method="get">
-                <p>
-                  <input type="submit" class="btn btn-lg btn-primary"  role="button">下载</input>
-                </p>
-           </form>
+          </div>
       </div>
 
     </div> <!-- /container -->

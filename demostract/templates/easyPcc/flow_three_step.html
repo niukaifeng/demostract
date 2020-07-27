@@ -81,7 +81,9 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-
+            <div class="page-header">
+                <h1> 选择模式<small>（3/3）</small></h1>
+            </div>
           <form enctype="multipart/form-data" action="/learningType" method="post">
               {% csrf_token %}
             进度一览
@@ -98,7 +100,6 @@
                       <option><a href="#">Support Vector Machine (Sklearn)</a></option>
                   </select>
                   <br><br>
-
                   Choose the pictures to be processed
                   <select>
                       <option> RIO</option>

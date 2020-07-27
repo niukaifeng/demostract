@@ -5,6 +5,7 @@ import time
 import numpy as np
 from datetime import timedelta
 
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
@@ -90,6 +91,9 @@ class LearningType(View):
 
         RefImg = path2
 
+
+        outfile2 = os.path.join(BASE_DIR, 'demostract', 'media') + 'InformationFile.csv'
+
         ListImageWrongSize, ListRunningTimes, ListTestDataTimes, ListApplyModelTimes, ListSaveOutputTimes = Segmentation(
             os.path.join(BASE_DIR, 'demostract', 'media'), trandatafilelist, tragetfilelist, learningType,
             reduction, numberOfClasses, classNameList, ROI, ListAreaNames,
@@ -144,4 +148,14 @@ class LearningType(View):
 
         np.savetxt(outPath, report, delimiter="\n", comments='', fmt='%s')
 
-        return render(request, 'easyPcc/result.html',{outPath:outPath})
+        return render(request, 'easyPcc/result.html',{"outPath":outPath,"outfile2":outfile2})
+
+class Downloadfiel(View):
+
+    def get(self,request):
+        outPath = request.Get.get("filenamePath")
+        file = open(outPath, 'rb')
+        response = HttpResponse(file)
+        response['Content-Type'] = 'application/octet-stream'  # 设置头信息，告诉浏览器这是个文件
+        response['Content-Disposition'] = 'attachment;filename="models.py"'
+        return response
