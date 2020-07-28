@@ -168,8 +168,10 @@ class Downloadfiel(View):
 
     def get(self,request):
         outPath = request.GET.get("filenamePath")
+
+        str(outPath).split(".")
         file = open(outPath, 'rb')
         response = HttpResponse(file)
         response['Content-Type'] = 'application/octet-stream'  # 设置头信息，告诉浏览器这是个文件
-        response['Content-Disposition'] = 'attachment;filename="models.py"'
+        response['Content-Disposition'] = 'attachment;filename="{}"'.format(str(outPath).split("/")[len(str(outPath).split("/"))-1])
         return response
