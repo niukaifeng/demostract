@@ -85,6 +85,7 @@
           <div class="page-header">
              <h1> 上传识别图片<small>（2/3）</small></h1>
           </div>
+           {{ msg }}
            进度一览
         {% csrf_token %}
         <div class="progress">
@@ -95,7 +96,7 @@
 
           <form enctype="multipart/form-data" action="/uploadFile_2" method="post">
                 {% csrf_token %}
-               <input type="file" name="myfile" />
+               <input type="file" name="myfile" />(文件必须是图片)
                <input value="{{ path1 }}" name="path1" type="hidden">
                <br/>
                 <p>

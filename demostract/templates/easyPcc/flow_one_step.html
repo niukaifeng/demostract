@@ -96,7 +96,7 @@
 
           <form enctype="multipart/form-data" action="/uploadFile_1" method="post">
                 {% csrf_token %}
-               <input type="file" name="myfile" />
+               <input type="file" name="myfile" />(文件必须是csv文件)
                <br/>
                 <p>
                   <input type="submit" class="btn btn-lg btn-primary"  role="button"></input>

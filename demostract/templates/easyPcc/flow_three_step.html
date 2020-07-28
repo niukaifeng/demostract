@@ -86,6 +86,7 @@
             </div>
           <form enctype="multipart/form-data" action="/learningType" method="post">
               {% csrf_token %}
+           {{ msg }}
             进度一览
             <div class="progress">
               <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">

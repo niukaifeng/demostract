@@ -23,11 +23,9 @@ class UpdaLoad(View):
         pass
     def post(self,request):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        uploadFile = request.FILES.get('myfile', '1')
-
+        uploadFile = request.FILES.get('myfile')
         if uploadFile == None or uploadFile == "":
             return render(request, 'easyPcc/flow_one_step.html', {"msg": "文件必须上传"})
-
         print(uploadFile.name)
         path1 = os.path.join(BASE_DIR, 'demostract', 'media', uploadFile.name)
         f = open(path1, 'wb')
@@ -42,8 +40,12 @@ class UpdaLoad2(View):
     def post(self,request):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         path1 = request.POST.get("path1")
-        uploadFile = request.FILES.get('myfile', '1')
-        print(uploadFile.name)
+        uploadFile = request.FILES.get('myfile')
+        if uploadFile == None or uploadFile == "":
+            return render(request, 'easyPcc/flow_two_step.html', {"msg": "文件必须上传"})
+        if path1 == None or path1 == "":
+            return render(request, 'easyPcc/flow_one_step.html', {"msg": "第一步上传文件丢失，返回第一步。"})
+
         path2 = os.path.join(BASE_DIR, 'demostract', 'media', uploadFile.name)
         f = open(path2, 'wb')
         for chunk in uploadFile.chunks():
@@ -62,6 +64,11 @@ class LearningType(View):
         reduction = request.POST.get("reduction","100")
         path1 = request.POST.get("path1")
         path2 = request.POST.get("path2")
+
+        if path2 == None or path2 == "":
+            return render(request, 'easyPcc/flow_two_step.html', {"msg": "第二步上传文件丢失，返回第二步。"})
+        if path1 == None or path1 == "":
+            return render(request, 'easyPcc/flow_one_step.html', {"msg": "第一步上传文件丢失，返回第一步。"})
 
         fusion = 'N'
         mask = 'Y'
@@ -98,10 +105,13 @@ class LearningType(View):
 
         outfile2 = os.path.join(BASE_DIR, 'demostract', 'media') + '/InformationFile.csv'
 
-        ListImageWrongSize, ListRunningTimes, ListTestDataTimes, ListApplyModelTimes, ListSaveOutputTimes = Segmentation(
-            os.path.join(BASE_DIR, 'demostract', 'media'), trandatafilelist, tragetfilelist, learningType,
-            reduction, numberOfClasses, classNameList, ROI, ListAreaNames,
-            fusion, mask, reconstructedimage, info, NFMask, BiggestBlob, chosenArea, RefImg)
+        try:
+            ListImageWrongSize, ListRunningTimes, ListTestDataTimes, ListApplyModelTimes, ListSaveOutputTimes = Segmentation(
+                os.path.join(BASE_DIR, 'demostract', 'media'), trandatafilelist, tragetfilelist, learningType,
+                reduction, numberOfClasses, classNameList, ROI, ListAreaNames,
+                fusion, mask, reconstructedimage, info, NFMask, BiggestBlob, chosenArea, RefImg)
+        except:
+            return render(request, 'easyPcc/flow_one_step.html', {"msg": "处理失败，检查上传文件。"})
 
         end_time = time.monotonic()
         time_all = timedelta(seconds=end_time - start_time)
