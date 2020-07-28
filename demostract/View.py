@@ -168,7 +168,6 @@ class Downloadfiel(View):
 
     def get(self,request):
         outPath = request.GET.get("filenamePath")
-
         str(outPath).split(".")
         file = open(outPath, 'rb')
         response = HttpResponse(file)
