@@ -1,5 +1,5 @@
 
-# xuyao需要
+# 需要
 pip install django 
 
 
